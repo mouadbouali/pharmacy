@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Request, UseGuards } from '@nestjs/common'
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { PermissionGuard } from 'src/auth/permission.guard';
+import { Permissions } from 'src/auth/permission.decorator';
 
 @Controller('user')
 export class UserController {
@@ -12,7 +14,8 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), PermissionGuard)
+  @Permissions('USER_UPDATE')
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
