@@ -37,4 +37,17 @@ export class RoleService {
             }
         });
     }
+
+    async updateRolePermissions(id: number, permissions: number[]) {
+        return this.databaseService.role.update({
+            where: {
+                id: id
+            },
+            data: {
+                permissions: {
+                    set: permissions.map((permissionId) => ({ id: permissionId }))
+                }
+            }
+        });
+    }
 }

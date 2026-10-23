@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Request, UseGuards, Patch, Param, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -9,6 +9,8 @@ import { Permissions } from 'src/auth/permission.decorator';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthGuard('jwt'), PermissionGuard)
+  @Permissions('USER_CREATE')
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
@@ -19,6 +21,13 @@ export class UserController {
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @UseGuards(AuthGuard('jwt'), PermissionGuard)
+  @Permissions('USER_UPDATE')
+  @Put(':id/roles')
+  updateUserRoles(@Param('id') id: number, @Body() roles: number[]){
+    return this.userService.updateUserRoles(id, roles);
   }
 
 /*   @Get()

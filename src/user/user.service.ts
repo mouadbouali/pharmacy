@@ -19,6 +19,19 @@ export class UserService {
     });
   }
 
+  async updateUserRoles(id: number, roles: number[]) {
+    return this.databaseService.user.update({
+      where: {
+        id,
+      },
+      data: {
+        roles: {
+          set: roles.map((roleId) => ({ id: roleId })),
+        },
+      },
+    });
+  }
+
   /* async update(id: number, updateUserDto: UpdateUserDto) {
     const hash = await bcrypt.hash(updateUserDto.password || '', 10);
     return this.databaseService.user.update({
@@ -49,6 +62,14 @@ export class UserService {
     return this.databaseService.user.findUnique({
       where: {
         email
+      },
+    });
+  }
+
+  async findOne(id: number) {
+    return this.databaseService.user.findUnique({
+      where: {
+        id
       },
     });
   }

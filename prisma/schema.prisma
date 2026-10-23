@@ -19,6 +19,7 @@ model User {
   email String @unique
   password String
   roles Role[]
+  refreshTokens RefreshToken[]
 }
 
 model Role {
@@ -32,4 +33,14 @@ model Permission {
   id Int @id @default(autoincrement())
   name String
   roles Role[]
+}
+
+model RefreshToken {
+  id Int @id @default(autoincrement())
+  userId Int
+  token String @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
