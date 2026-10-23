@@ -8,6 +8,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { PermissionGuard } from './permission.guard';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PermissionGuard } from './permission.guard';
     signOptions: { expiresIn: '15m' },
   }),
     }),
+    DatabaseModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy, PermissionGuard],
